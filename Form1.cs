@@ -31,17 +31,19 @@ namespace NotePadWF_CS
             Text = "Untitled - " + Application.ProductName;
             aboutToolStripMenuItem.Text = "About " + Application.ProductName;
 
-            Location = Properties.Settings.Default.MyLocation;
-            if (!Properties.Settings.Default.MySize.IsEmpty)
-            {
-                Size = Properties.Settings.Default.MySize;
-            }
+            // Load settings using the new service
+            var userSettings = UserSettingsService.Instance.Settings;
 
-            richTextBox1.Font = Properties.Settings.Default.MyFont;
+            Location = userSettings.MyLocation;
+            // MySize will have a default, so IsEmpty check isn't strictly needed in the same way
+            // However, to prevent setting a tiny default size if not intended, we can check against default if needed
+            // For now, direct assignment is fine as UserSettings provides defaults.
+            Size = userSettings.MySize;
+            richTextBox1.Font = userSettings.MyFont;
             
             // Configure themes
-            richTextBox1.ForeColor = Properties.Settings.Default.MyTextColor;
-            richTextBox1.BackColor = Properties.Settings.Default.MyBackgroundColor;
+            richTextBox1.ForeColor = userSettings.MyTextColor;
+            richTextBox1.BackColor = userSettings.MyBackgroundColor;
             
             if ((richTextBox1.ForeColor == Color.Black) & (richTextBox1.BackColor == Color.White))
                 blackOnWhiteDefaultToolStripMenuItem.Checked = true;
@@ -52,8 +54,8 @@ namespace NotePadWF_CS
             if ((richTextBox1.ForeColor == Color.LightGreen) & (richTextBox1.BackColor == Color.Black))
                 greenOnBlackToolStripMenuItem.Checked = true;
 
-            richTextBox1.WordWrap = Properties.Settings.Default.MyWordWrap;
-            wordWrapToolStripMenuItem.Checked = Properties.Settings.Default.MyWordWrap;
+            richTextBox1.WordWrap = userSettings.MyWordWrap;
+            wordWrapToolStripMenuItem.Checked = userSettings.MyWordWrap;
             if (richTextBox1.WordWrap == true)
             {
                 richTextBox1.ScrollBars = RichTextBoxScrollBars.Both;
@@ -62,10 +64,10 @@ namespace NotePadWF_CS
             {
                 richTextBox1.ScrollBars = RichTextBoxScrollBars.Vertical;
             }
-            statusStrip1.Visible = Properties.Settings.Default.MyStatusBar;
-            statusBarToolStripMenuItem.Checked = Properties.Settings.Default.MyStatusBar;
+            statusStrip1.Visible = userSettings.MyStatusBarVisible;
+            statusBarToolStripMenuItem.Checked = userSettings.MyStatusBarVisible;
 
-            autoSaveToolStripMenuItem.Checked = Properties.Settings.Default.MyAutoSave;
+            autoSaveToolStripMenuItem.Checked = userSettings.MyAutoSaveEnabled;
             if (autoSaveToolStripMenuItem.Checked)
             {
                 timer1.Enabled = true;
@@ -82,15 +84,19 @@ namespace NotePadWF_CS
         {
             timer1.Enabled = false;
 
-            Properties.Settings.Default.MyLocation = Location;
-            Properties.Settings.Default.MySize = Size;
-            Properties.Settings.Default.MyFont = richTextBox1.Font;
-            Properties.Settings.Default.MyTextColor = richTextBox1.ForeColor;
-            Properties.Settings.Default.MyBackgroundColor = richTextBox1.BackColor;
-            Properties.Settings.Default.MyStatusBar = statusStrip1.Visible;
-            Properties.Settings.Default.MyWordWrap = wordWrapToolStripMenuItem.Checked;
-            Properties.Settings.Default.MyAutoSave = autoSaveToolStripMenuItem.Checked;
-            Properties.Settings.Default.Save();
+            // Save settings using the new service
+            var userSettings = UserSettingsService.Instance.Settings;
+
+            userSettings.MyLocation = Location;
+            userSettings.MySize = Size;
+            userSettings.MyFont = richTextBox1.Font; // This uses the setter in UserSettings
+            userSettings.MyTextColor = richTextBox1.ForeColor; // Uses setter
+            userSettings.MyBackgroundColor = richTextBox1.BackColor; // Uses setter
+            userSettings.MyStatusBarVisible = statusStrip1.Visible;
+            userSettings.MyWordWrap = wordWrapToolStripMenuItem.Checked;
+            userSettings.MyAutoSaveEnabled = autoSaveToolStripMenuItem.Checked;
+
+            UserSettingsService.Instance.Save();
 
             if (TextHasChanged)
             {
