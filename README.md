@@ -14,6 +14,14 @@
 
 This version of .NETpad should work on all supported versions of Windows 10 and Windows 11.
 
+## User Settings
+
+User-specific settings (like window size, location, font, colors, and other preferences) are stored in a JSON file named `usersettings.json`. You can find this file in your local application data folder, typically at:
+
+- Windows: `%LOCALAPPDATA%\.NETpad\usersettings.json`
+
+Deleting this file will reset .NETpad to its default settings on the next launch.
+
 ## .NET 8 and ARM64 Support
 
 This version of .NETpad has been migrated to .NET 8 and includes native support for ARM64 versions of Windows (e.g., Windows 11 on ARM). This allows .NETpad to run without x64 emulation on ARM64 devices, providing better performance and efficiency.
