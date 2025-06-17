@@ -1,6 +1,6 @@
 # .NETpad
 
-**(C#/.NET Framework 4.7x/Windows Forms version)**
+**(C#/.NET 8/Windows Forms version with ARM64 Support)**
 
 ![.NETpad hero image](/graphics/hero.jpg)
 
@@ -13,3 +13,42 @@
 [I documented how I created a Visual Basic version of this app on Thurrott.com](https://www.thurrott.com/tag/the-winforms-notepad-project). And I am now updating this C# version of the app with some more modern features and bug fixes. 
 
 This version of .NETpad should work on all supported versions of Windows 10 and Windows 11.
+
+## .NET 8 and ARM64 Support
+
+This version of .NETpad has been migrated to .NET 8 and includes native support for ARM64 versions of Windows (e.g., Windows 11 on ARM). This allows .NETpad to run without x64 emulation on ARM64 devices, providing better performance and efficiency.
+
+### Building for ARM64
+
+To build and publish .NETpad specifically for ARM64:
+
+1.  **Using the Publish Profile (Recommended):**
+    Open a command prompt or terminal in the project's root directory and run:
+    ```bash
+    dotnet publish /p:PublishProfile=Properties/PublishProfiles/win-arm64.pubxml
+    ```
+    This will create a self-contained, single-file executable optimized for ARM64 in the `bin/Release/net8.0-windows/win-arm64/publish/` directory.
+
+2.  **Manual `dotnet publish` command:**
+    Alternatively, you can use the following command:
+    ```bash
+    dotnet publish NotePadWF-CS.csproj -c Release -r win-arm64 --self-contained true /p:PublishSingleFile=true /p:PublishReadyToRun=true
+    ```
+    This achieves a similar result.
+
+### Building for x64
+
+To build and publish for traditional x64 systems:
+    ```bash
+    dotnet publish NotePadWF-CS.csproj -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true /p:PublishReadyToRun=true
+    ```
+    (An x64 publish profile could also be created for convenience).
+
+### Running on ARM64
+
+After publishing, take the executable from the `publish` directory (e.g., `.NETpad.exe` from the `win-arm64/publish` folder) and run it on your ARM64 Windows device. It should run as a native ARM64 application.
+
+### Known Limitations on ARM64
+
+*   As of this update, no specific limitations have been identified when running the native ARM64 version compared to the x64 version. All features are expected to work. Any discovered issues will be documented here.
+```

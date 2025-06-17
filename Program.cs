@@ -14,6 +14,8 @@ namespace NotePadWF_CS
         [STAThread]
         static void Main()
         {
+            // Add this line for DPI awareness
+            Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
