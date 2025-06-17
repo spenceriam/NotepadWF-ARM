@@ -1,4 +1,4 @@
-﻿using System.Windows.Forms;
+using System.Windows.Forms;
 
 namespace NotePadWF_CS
 {
@@ -42,17 +42,18 @@ namespace NotePadWF_CS
             return richTextBox.GetLineFromCharIndex(richTextBox.SelectionStart) == richTextBox.GetLineFromCharIndex(richTextBox.TextLength);
         }
 
-        private static void RichTextBox_KeyDown(object sender, KeyEventArgs e)
+        private static void RichTextBox_KeyDown(object? sender, KeyEventArgs e) // Changed here
         {
-            var richTextBox = (RichTextBox)sender;
-            if (richTextBox.IsSelectionOnFirstLine() && e.KeyCode == Keys.Up ||
-               richTextBox.IsSelectionOnLastLine() && e.KeyCode == Keys.Down ||
-               richTextBox.IsSelectionAtStart() && (e.KeyCode == Keys.Left || e.KeyCode == Keys.Back) ||
-               richTextBox.IsSelectionAtEnd() && (e.KeyCode == Keys.Right || e.KeyCode == Keys.Delete))
+            if (sender is RichTextBox richTextBox) // Added null check pattern
             {
-                e.Handled = true;
+                if (richTextBox.IsSelectionOnFirstLine() && e.KeyCode == Keys.Up ||
+                   richTextBox.IsSelectionOnLastLine() && e.KeyCode == Keys.Down ||
+                   richTextBox.IsSelectionAtStart() && (e.KeyCode == Keys.Left || e.KeyCode == Keys.Back) ||
+                   richTextBox.IsSelectionAtEnd() && (e.KeyCode == Keys.Right || e.KeyCode == Keys.Delete))
+                {
+                    e.Handled = true;
+                }
             }
         }
-
     }
 }
