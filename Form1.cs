@@ -11,10 +11,9 @@ namespace NotePadWF_CS
     {
         private Boolean TextHasChanged = false;
         private String DocumentName = "";
-        private Font MasterFont;
         private String FindTextString = "";
         private int FindLastIndexFound = 0;
-        private string PrintText;
+        private string? PrintText;
         private int StartPage;
         private int NumPages;
         private int PageNumber;
@@ -434,7 +433,9 @@ namespace NotePadWF_CS
         {
             try
             {
-                int LineNum = Convert.ToInt32(Interaction.InputBox("Line number:", "Go to line", "", Location.X + 200, Location.Y + 300));
+                string? lineNumStr = Interaction.InputBox("Line number:", "Go to line", "", Location.X + 200, Location.Y + 300);
+                if (string.IsNullOrEmpty(lineNumStr)) return; // Exit if user cancelled or entered nothing
+                int LineNum = Convert.ToInt32(lineNumStr);
                 if (LineNum <= richTextBox1.Lines.Length)
                 {
                     richTextBox1.SelectionStart = richTextBox1.GetFirstCharIndexFromLine(LineNum - 1);
@@ -711,7 +712,7 @@ namespace NotePadWF_CS
 
         private void findToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FindTextString = Interaction.InputBox("Find what:", "Find", richTextBox1.SelectedText, Location.X + 200, Location.Y + 300);
+            FindTextString = Interaction.InputBox("Find what:", "Find", richTextBox1.SelectedText, Location.X + 200, Location.Y + 300) ?? "";
             // Find the text from the current cursor position
             FindTextIndex(richTextBox1.SelectionStart, false);
             FindTheText();
@@ -731,8 +732,8 @@ namespace NotePadWF_CS
 
         private void replaceToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string FindWhat = Interaction.InputBox("Find what:", "Replace", richTextBox1.SelectedText, Location.X + 200, Location.Y + 300);
-            string ReplaceWith = Interaction.InputBox("Replace with:", "Replace", "", Location.X + 200, Location.Y + 300);
+            string FindWhat = Interaction.InputBox("Find what:", "Replace", richTextBox1.SelectedText, Location.X + 200, Location.Y + 300) ?? "";
+            string ReplaceWith = Interaction.InputBox("Replace with:", "Replace", "", Location.X + 200, Location.Y + 300) ?? "";
 
             FindTextString = FindWhat;
             // Find text from current cursor position
@@ -746,8 +747,8 @@ namespace NotePadWF_CS
 
         private void replaceAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string FindWhat = Interaction.InputBox("Find what:", "Replace all", richTextBox1.SelectedText, Location.X + 200, Location.Y + 300);
-            string ReplaceWith = Interaction.InputBox("Replace with:", "Replace all", "", Location.X + 200, Location.Y + 300);
+            string FindWhat = Interaction.InputBox("Find what:", "Replace all", richTextBox1.SelectedText, Location.X + 200, Location.Y + 300) ?? "";
+            string ReplaceWith = Interaction.InputBox("Replace with:", "Replace all", "", Location.X + 200, Location.Y + 300) ?? "";
 
             FindTextString = FindWhat;
             FindTextIndex(0, false);
